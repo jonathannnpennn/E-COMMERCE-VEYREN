@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090909" />
+  <title>E-commerce</title>
+
+  <style>
+    :root {
+      --bg: #090909;
+      --surface: rgba(20, 20, 20, 0.82);
+      --surface-light: rgba(255, 255, 255, 0.045);
+      --gold: #d9b66f;
+      --gold-light: #f5df9c;
+      --gold-dark: #9e7434;
+      --text: #f5f1e7;
+      --muted: #aaa397;
+      --line: rgba(217, 182, 111, 0.26);
+      --shadow: rgba(0, 0, 0, 0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 14%, rgba(154, 109, 35, 0.22), transparent 26rem),
+        radial-gradient(circle at 92% 88%, rgba(217, 182, 111, 0.12), transparent 28rem),
+        linear-gradient(135deg, #060606 0%, #11100d 50%, #070707 100%);
+      padding: 28px 18px;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    body::before {
+      width: 360px;
+      height: 360px;
+      top: -160px;
+      left: -120px;
+      border: 1px solid rgba(217, 182, 111, 0.12);
+      box-shadow:
+        0 0 0 60px rgba(217, 182, 111, 0.025),
+        0 0 0 120px rgba(217, 182, 111, 0.018);
+    }
+
+    body::after {
+      width: 440px;
+      height: 440px;
+      bottom: -235px;
+      right: -180px;
+      border: 1px solid rgba(217, 182, 111, 0.11);
+      box-shadow:
+        0 0 0 70px rgba(217, 182, 111, 0.02),
+        0 0 0 140px rgba(217, 182, 111, 0.015);
+    }
+
+    .card {
+      position: relative;
+      width: min(100%, 570px);
+      overflow: hidden;
+      padding: 48px 42px 38px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 34%),
+        var(--surface);
+      box-shadow:
+        0 35px 80px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      animation: cardEnter 0.8s ease-out both;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 58%;
+      height: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        var(--gold-light),
+        var(--gold),
+        transparent
+      );
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      z-index: -1;
+      border: 1px solid rgba(217, 182, 111, 0.08);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .brand {
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 27px;
+      padding: 13px;
+      border: 1px solid rgba(217, 182, 111, 0.42);
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 35% 25%,
+        rgba(255, 255, 255, 0.15),
+        rgba(217, 182, 111, 0.04) 55%,
+        transparent 70%
+      );
+      box-shadow:
+        0 0 0 8px rgba(217, 182, 111, 0.045),
+        0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: grayscale(1) brightness(2.2) sepia(0.55) saturate(0.9);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    .eyebrow::after {
+      transform: rotate(180deg);
+    }
+
+    h1 {
+      margin: 0;
+      color: #fffaf0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 6vw, 42px);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 13px auto 26px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: min(100%, 320px);
+      margin: 0 auto 25px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(217, 182, 111, 0.45));
+    }
+
+    .divider::after {
+      transform: rotate(180deg);
+    }
+
+    .divider span {
+      width: 6px;
+      height: 6px;
+      transform: rotate(45deg);
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(217, 182, 111, 0.8);
+    }
+
+    .description {
+      max-width: 440px;
+      margin: 0 auto 29px;
+      color: #d2ccc1;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .choice-group {
+      display: grid;
+      gap: 12px;
+    }
+
+    .button {
+      position: relative;
+      width: 100%;
+      min-height: 62px;
+      overflow: hidden;
+      padding: 16px 24px;
+      border: 1px solid transparent;
+      border-radius: 15px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .button:not(:disabled):hover {
+      transform: translateY(-3px);
+    }
+
+    .button:not(:disabled):active {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      color: #18130a;
+      background: linear-gradient(
+        110deg,
+        #af7f39 0%,
+        #f3da95 45%,
+        #c7964a 75%,
+        #f8e6ad 100%
+      );
+      box-shadow:
+        0 12px 28px rgba(177, 127, 50, 0.22),
+        inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    }
+
+    .primary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 100%;
+      transform: skewX(-22deg);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.5),
+        transparent
+      );
+      transition: left 0.65s ease;
+    }
+
+    .primary:hover::before {
+      left: 150%;
+    }
+
+    .primary:hover {
+      box-shadow:
+        0 18px 40px rgba(177, 127, 50, 0.34),
+        inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    }
+
+    .secondary {
+      color: #5d574e;
+      border-color: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.025);
+      cursor: not-allowed;
+    }
+
+    .secondary:disabled {
+      opacity: 0.8;
+    }
+
+    .notice {
+      margin: 28px 0 0;
+      color: #817b72;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .notice a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .notice a:hover {
+      color: var(--gold-light);
+      text-decoration: underline;
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 39px 23px 29px;
+        border-radius: 23px;
+      }
+
+      .brand {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 23px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
+
+      .button {
+        min-height: 58px;
+        font-size: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="brand">
+      <img
+        src="https://media.discordapp.net/attachments/1553052067264856114/1553052614168678400/tiktok_logo-removebg-preview_1.png?ex=6ab7d875&is=6ab686f5&hm=098353dea06274b6f9ad586b6ca604b44dd1c266f7f1bd6434980be858868c65&=&format=webp&quality=lossless"
+        alt="Logo Brand"
+      />
+    </div>
+
+    <p class="eyebrow">Verifikasi Akses</p>
+
+    <h1>Verifikasi Ketelitian</h1>
+
+    <div class="subtitle">
+      Pilih jawaban yang tepat untuk melanjutkan
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <p class="description">
+      Situs ini diperuntukkan bagi pengguna yang dapat menjawab pertanyaan
+      Jika 10 + 10. Silahkan Konfirmasi jawaban anda untuk melanjutkan
+    </p>
+
+    <div class="choice-group">
+      <button
+        class="button primary"
+        type="button"
+        onclick="redirectUser('https://pafimalang.org/register?referral=fbadkrtl')"
+      >
+        Saya memilih opsi 20
+      </button>
+
+      <button class="button secondary" type="button" disabled>
+        Saya memilih opsi 25
+      </button>
+    </div>
+
+    <p class="notice">
+      Dengan melanjutkan, Anda menyetujui
+      <a href="/syarat">Syarat</a> dan
+      <a href="/privasi">Privasi</a>.
+    </p>
+  </main>
+
+  <script>
+    function redirectUser(url) {
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>
